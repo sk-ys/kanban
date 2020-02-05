@@ -1,3 +1,5 @@
+var kanban_relative_url_root = document.location.href.split("/kanban")[0].replace(document.location.origin,'');
+
 $(function() {
     // サイドバーを表示
     $('#main').removeClass('nosidebar');
@@ -102,7 +104,7 @@ $(function() {
 function saveTicket(card_id, from_field_id, to_field_id, comment) {
     // AJAX
     $.ajax({
-        url:'/update_status',
+        url:kanban_relative_url_root + '/update_status',
         type:'POST',
         data:{
             'card_id'  :card_id, 
@@ -205,7 +207,7 @@ function saveTicket(card_id, from_field_id, to_field_id, comment) {
 function getJournal(card_id) {
     // AJAX
     $.ajax({
-        url:'/get_journal',
+        url:kanban_relative_url_root + '/get_journal',
         type:'POST',
         data:{
             'card_id' :card_id ,
@@ -239,7 +241,7 @@ function putJournal(card_id) {
     var note = $('#comment_area').val();
     // AJAX
     $.ajax({
-        url:'/put_journal',
+        url:kanban_relative_url_root + '/put_journal',
         type:'POST',
         data:{
             'card_id' :card_id ,

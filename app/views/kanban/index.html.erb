@@ -1,14 +1,14 @@
 <!-- Javascript -->
-<script src="/javascripts/context_menu.js"></script>
+<%= javascript_include_tag "context_menu" %>
 <%= javascript_include_tag "kanban", :plugin => "kanban" %>
 <!-- CSS -->
-<link rel="stylesheet" media="screen" href="/stylesheets/context_menu.css">
+<%= stylesheet_link_tag 'context_menu', media: "screen" %>
 <%= stylesheet_link_tag 'kanban', :plugin => 'kanban' %>
 <div class="contextual">
   <% if @project_id.blank? != true then %>
-    <a class="icon icon-add new-issue" href="/projects/<%= @project_id %>/issues/new">新しいチケット</a>
+    <a class="icon icon-add new-issue" href="<%= "#{Redmine::Utils.relative_url_root}" %>/projects/<%= @project_id %>/issues/new">新しいチケット</a>
   <% else %>
-    <a class="icon icon-add new-issue" href="/issues/new">新しいチケット</a>
+    <a class="icon icon-add new-issue" href="<%= "#{Redmine::Utils.relative_url_root}" %>/issues/new">新しいチケット</a>
   <% end %>
 </div>
 <!-- タイトル -->
@@ -37,7 +37,7 @@
         </td>
       </tr>
       <tr>
-        <td style="width: 100px">  
+        <td style="width: 100px">
           <label>終了日</label>
         </td>
         <td>
@@ -91,7 +91,7 @@
         </td>
       </tr>
       <tr>
-        <td style="width: 100px">  
+        <td style="width: 100px">
           <label>WIP制限</label>
         </td>
         <td>
@@ -131,13 +131,13 @@
 <p class="buttons">
   <a href="#" onclick="$('#form1').submit(); return false;" class="icon icon-checked">適用</a>
   <% if @project_id.blank? == true then %>
-    <a class="icon icon-reload" href="/kanban?clear=1">クリア</a>
+    <a class="icon icon-reload" href="<%= "#{Redmine::Utils.relative_url_root}" %>/kanban?clear=1">クリア</a>
   <% else %>
-    <a class="icon icon-reload" href="/kanban?clear=1&project_id=<%= @project_id %>">クリア</a>
+    <a class="icon icon-reload" href="<%= "#{Redmine::Utils.relative_url_root}" %>/kanban?clear=1&project_id=<%= @project_id %>">クリア</a>
   <% end %>
 </p>
 <!-- フォーム -->
-<form data-cm-url="/issues/context_menu" action="/issues" accept-charset="UTF-10" method="post">
+<form data-cm-url=<%= "#{Redmine::Utils.relative_url_root}/issues/context_menu" %> action="<%= "#{Redmine::Utils.relative_url_root}" %>/issues" accept-charset="UTF-10" method="post">
 <div>
   <!-- テーブル -->
   <table class="list issues odd-even" style="table-layout: fixed;">
@@ -172,13 +172,13 @@
                 <% end %>
               <% end %>
               <% @issues_hash[status_id].each {|issue| %>
-                <% if uid == issue.assigned_to_id %>  
+                <% if uid == issue.assigned_to_id %>
                   <!-- 1枚のカード -->
                   <div id="issue-<%= issue.id %>" class="hascontextmenu created-by-me context-menu-selection
                     <!-- カード色 -->
                     <% if issue.priority_id >= 3 then %> my-issue-card-high-priority <% elsif issue.priority_id == 2 %> my-issue-card <% else %> my-issue-card-low-priority <% end %>">
                     <div style="float: right; font-size: smaller"><%= issue.project.name %></div><p><input type="checkbox" name="ids[]" value="<%= issue.id %>"> <%= issue.tracker.name %> #<%= issue.id %></p>
-                    <p><a href="../issues/<%= issue.id %>"><%= issue.subject %></a></p>
+                    <p><a href="<%= issue_path(issue.id) %>"><%= issue.subject %></a></p>
                     <hr>
                     <!-- 24時間以内に更新 -->
                     <% diff = (Time.now - issue.updated_on) / 3600 / 24 %>
@@ -197,7 +197,7 @@
 <!-- 各ユーザーのhidden値 -->
 <% @user_id_array.each {|uid| %>
   <% if uid != nil then %>
-    <!-- WIP値 --> 
+    <!-- WIP値 -->
     <p id="wip-<%= uid %>" style="display: none;"><%= @wip_hash[uid] %></p>
     <!-- ユーザ名 -->
     <p id="user_name_user_id-<%= uid %>" style="display: none;"><%= @all_users.find(uid).lastname %>さん</p>
